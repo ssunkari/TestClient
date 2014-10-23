@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using System.Linq;
 using application.Client.Models;
 using MongoDB.Driver;
 
@@ -18,7 +19,7 @@ namespace application.Client
             Get["/data"] = parameters =>
             {
                 var connectionstring =
-    ConfigurationManager.AppSettings.Get("(MONGOHQ_URL");
+    ConfigurationManager.AppSettings.Get("MONGOHQ_URL");
                 var url = new MongoUrl(connectionstring);
                 var client = new MongoClient(url);
                 var server = client.GetServer();
@@ -31,7 +32,7 @@ namespace application.Client
 
                 // fetch all objects
                 var thingies = collection.FindAll();
-                return thingies;
+                return thingies.ToList().ToString();
             };
         }
     }
