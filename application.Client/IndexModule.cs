@@ -1,4 +1,8 @@
-﻿namespace application.Client
+﻿using System.Configuration;
+using application.Client.Models;
+using MongoDB.Driver;
+
+namespace application.Client
 {
     using Nancy;
 
@@ -13,7 +17,21 @@
 
             Get["/data"] = parameters =>
             {
-                return "Helolo";
+                var connectionstring =
+    ConfigurationManager.AppSettings.Get("(MONGOHQ_URL|MONGOLAB_URI)");
+                var url = new MongoUrl(connectionstring);
+                var client = new MongoClient(url);
+                var server = client.GetServer();
+                var database = server.GetDatabase(url.DatabaseName);
+
+                var collection = database.GetCollection<Thingy>("Thingies");
+
+                // insert object
+                collection.Insert(new Thingy { Name = "foo" });
+
+                // fetch all objects
+                var thingies = collection.FindAll();
+                return thingies;
             };
         }
     }
