@@ -18,7 +18,7 @@ namespace application.Client
             Get["/data"] = parameters =>
             {
                 var connectionstring =
-    ConfigurationManager.AppSettings.Get("(MONGOHQ_URL|MONGOLAB_URI)");
+    ConfigurationManager.AppSettings.Get("(MONGOHQ_URL");
                 var url = new MongoUrl(connectionstring);
                 var client = new MongoClient(url);
                 var server = client.GetServer();
